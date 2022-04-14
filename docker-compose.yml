@@ -63,6 +63,7 @@ services:
     depends_on:
         - rabbit
     environment:
+        - RABBIT_QUEUE=mail_processed
         - RABBITMQ_USER=guest
         - RABBITMQ_PASS=guest
         - RABBITMQ_HOST=rabbit
