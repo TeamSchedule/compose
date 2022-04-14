@@ -1,0 +1,71 @@
+version: '3.3'
+
+services:
+  rabbit:
+    image: rabbitmq:3.9-management
+    container_name: "rabbitmq"
+    environment:
+        - RABBITMQ_DEFAULT_USER=guest
+        - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+  postgres:
+    image: postgres:13.6
+    container_name: "postgres"
+    environment:
+      - POSTGRES_DB=schedule
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - "5432:5432"
+  user:
+    container_name: "user"
+    build:
+      context: ./user
+      dockerfile: ./Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_HOSTS=postgres:5432
+      - POSTGRES_DB=schedule
+      - POSTGRES_USER=postgres
+      - POSTGRES_PWD=qwerty
+  registration:
+    container_name: "registration"
+    build:
+      context: ./registration
+      dockerfile: ./Dockerfile
+    depends_on:
+      - postgres
+      - user
+      - rabbit
+    ports:
+      - "8081:8081"
+    environment:
+      - POSTGRES_HOSTS=postgres:5432
+      - POSTGRES_DB=schedule
+      - POSTGRES_USER=postgres
+      - POSTGRES_PWD=qwerty
+      - RABBIT_HOST=rabbit
+      - RABBIT_PORT=5672
+      - RABBIT_USERNAME=guest
+      - RABBIT_PASSWORD=guest
+      - SERVER_PORT=8081
+      - RABBIT_QUEUE=mail_processed
+      - USER_SERVICE_HOSTS=user:8080
+  email:
+    build:
+        context: ./email
+        dockerfile: ./Dockerfile
+    depends_on:
+        - rabbit
+    environment:
+        - RABBITMQ_USER=guest
+        - RABBITMQ_PASS=guest
+        - RABBITMQ_HOST=rabbit
+        - RABBITMQ_PORT=5672
+        - FROM_EMAIL=teamscheduleservice@gmail.com
+        - FROM_EMAIL_PASSWORD=teamscheduleservice1%
