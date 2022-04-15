@@ -57,6 +57,7 @@ services:
       - RABBIT_QUEUE=mail_processed
       - USER_SERVICE_HOSTS=user:8080
   email:
+    container_name: "email"
     build:
         context: ./email
         dockerfile: ./Dockerfile
