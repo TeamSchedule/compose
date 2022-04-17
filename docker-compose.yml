@@ -10,6 +10,7 @@ services:
     ports:
         - "5672:5672"
         - "15672:15672"
+
   postgres:
     image: postgres:13.6
     container_name: "postgres"
@@ -19,6 +20,7 @@ services:
       - POSTGRES_PASSWORD=qwerty
     ports:
       - "5432:5432"
+
   user:
     container_name: "user"
     build:
@@ -33,6 +35,7 @@ services:
       - POSTGRES_DB=schedule
       - POSTGRES_USER=postgres
       - POSTGRES_PWD=qwerty
+
   registration:
     container_name: "registration"
     build:
@@ -56,6 +59,7 @@ services:
       - SERVER_PORT=8081
       - RABBIT_QUEUE=mail_processed
       - USER_SERVICE_HOSTS=user:8080
+
   email:
     container_name: "email"
     build:
@@ -71,3 +75,19 @@ services:
         - RABBITMQ_PORT=5672
         - FROM_EMAIL=teamscheduleservice@gmail.com
         - FROM_EMAIL_PASSWORD=teamscheduleservice1%
+
+  jwt:
+    container_name: "jwt"
+    build:
+        context: ./jwt
+        dockerfile: ./Dev.dockerfile
+    depends_on:
+        - user
+    ports:
+        - "8082:8080"
+    volumes:
+        - ./jwt:/jwt
+    environment:
+        - JWT_SECRET_KEY=kXpBmV^_|BFq#c.-""B:cd#k6-/EuVp]
+        - USER_SERVICE_HOSTS=user:8080
+
