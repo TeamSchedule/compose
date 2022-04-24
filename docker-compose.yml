@@ -15,50 +15,50 @@ services:
     image: postgres:13.6
     container_name: "postgres"
     environment:
-      - POSTGRES_DB=schedule
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=qwerty
+        - POSTGRES_DB=schedule
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=qwerty
     ports:
-      - "5432:5432"
+        - "5432:5432"
 
   user:
     container_name: "user"
     build:
-      context: ./user
-      dockerfile: ./Dockerfile
+        context: ./user
+        dockerfile: ./Dockerfile
     depends_on:
-      - postgres
+        - postgres
     ports:
-      - "8080:8080"
+        - "8080:8080"
     environment:
-      - POSTGRES_HOSTS=postgres:5432
-      - POSTGRES_DB=schedule
-      - POSTGRES_USER=postgres
-      - POSTGRES_PWD=qwerty
+        - POSTGRES_HOSTS=postgres:5432
+        - POSTGRES_DB=schedule
+        - POSTGRES_USER=postgres
+        - POSTGRES_PWD=qwerty
 
   registration:
     container_name: "registration"
     build:
-      context: ./registration
-      dockerfile: ./Dockerfile
+        context: ./registration
+        dockerfile: ./Dockerfile
     depends_on:
-      - postgres
-      - user
-      - rabbit
+        - postgres
+        - user
+        - rabbit
     ports:
-      - "8081:8081"
+        - "8081:8081"
     environment:
-      - POSTGRES_HOSTS=postgres:5432
-      - POSTGRES_DB=schedule
-      - POSTGRES_USER=postgres
-      - POSTGRES_PWD=qwerty
-      - RABBIT_HOST=rabbit
-      - RABBIT_PORT=5672
-      - RABBIT_USERNAME=guest
-      - RABBIT_PASSWORD=guest
-      - SERVER_PORT=8081
-      - RABBIT_QUEUE=mail_processed
-      - USER_SERVICE_HOSTS=user:8080
+        - POSTGRES_HOSTS=postgres:5432
+        - POSTGRES_DB=schedule
+        - POSTGRES_USER=postgres
+        - POSTGRES_PWD=qwerty
+        - RABBIT_HOST=rabbit
+        - RABBIT_PORT=5672
+        - RABBIT_USERNAME=guest
+        - RABBIT_PASSWORD=guest
+        - SERVER_PORT=8081
+        - RABBIT_QUEUE=mail_processed
+        - USER_SERVICE_HOSTS=user:8080
 
   email:
     container_name: "email"
@@ -94,16 +94,24 @@ services:
   nginx:
     container_name: "nginx"
     build:
-      context: ./nginx
-      dockerfile: ./Dev.dockerfile
+        context: ./nginx
+        dockerfile: ./Dev.dockerfile
     depends_on:
-      - jwt
-      - email
-      - registration
-      - user
-      - postgres
-      - rabbit
+        - jwt
+        - email
+        - registration
+        - user
+        - postgres
+        - rabbit
     ports:
-      - "80:80"
+        - "80:80"
     volumes:
-      - ./nginx/static/:/nginx/static
+        - ./nginx/static/:/nginx/static
+
+  client:
+    container_name: "client"
+    build:
+        context: ./client
+        dockerfile: ./Dev.dockerfile
+    ports:
+        - "3000:3000"
