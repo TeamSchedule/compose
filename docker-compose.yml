@@ -115,5 +115,3 @@ services:
         dockerfile: ./Dev.dockerfile
     ports:
         - "3000:3000"
-    volumes:
-        - ./client:/app
