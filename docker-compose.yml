@@ -20,7 +20,6 @@ services:
         - POSTGRES_PASSWORD=qwerty
     ports:
         - "5432:5432"
-
   user:
     container_name: "user"
     build:
@@ -115,3 +114,18 @@ services:
         dockerfile: ./Dev.dockerfile
     ports:
         - "3000:3000"
+  team:
+    container_name: "team"
+    build:
+        context: ./team
+        dockerfile: ./Dockerfile
+    depends_on:
+        - postgres
+    ports:
+        - "8083:8083"
+    environment:
+        - POSTGRES_HOSTS=postgres:5432
+        - POSTGRES_DB=schedule
+        - POSTGRES_USER=postgres
+        - POSTGRES_PWD=qwerty
+        - SERVER_PORT=8083
