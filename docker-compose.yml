@@ -97,6 +97,7 @@ services:
         dockerfile: ./Dev.dockerfile
     depends_on:
         - jwt
+        - jwt-filter
         - email
         - registration
         - user
@@ -114,6 +115,7 @@ services:
         dockerfile: ./Dev.dockerfile
     ports:
         - "3000:3000"
+
   team:
     container_name: "team"
     build:
@@ -129,3 +131,14 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PWD=qwerty
         - SERVER_PORT=8083
+        
+  jwt-filter:
+    container_name: "jwt-filter"
+    build:
+        context: ./jwt-filter
+        dockerfile: ./Dev.dockerfile
+    ports:
+        - "8086:8086"
+    environment:
+        - JWT_SECRET_KEY=kXpBmV^_|BFq#c.-""B:cd#k6-/EuVp]
+        - JWT_FILTER_PORT=8086
