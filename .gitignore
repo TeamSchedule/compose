@@ -4,3 +4,4 @@
 # But not these files...
 !.gitignore
 !docker-compose.yml
+!clone-repos.sh
