@@ -107,18 +107,18 @@ services:
         volumes:
             - ./nginx/static/:/nginx/static
 
-    client:
-        container_name: "client"
-        build:
-            context: ./client
-            dockerfile: ./Dev.dockerfile
-        ports:
-        - "3000:3000"
+#    client:
+#        container_name: "client"
+#        build:
+#            context: ./client
+#            dockerfile: ./Dev.dockerfile
+#        ports:
+#        - "3000:3000"
 
-    team:
-        container_name: "team"
+    schedule:
+        container_name: "schedule"
         build:
-            context: ./team
+            context: ./schedule
             dockerfile: ./Dockerfile
         depends_on:
             - postgres
