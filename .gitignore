@@ -5,3 +5,4 @@
 !.gitignore
 !docker-compose.yml
 !clone-repos.sh
+!pull-windows.ps1
