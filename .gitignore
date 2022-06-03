@@ -6,3 +6,4 @@
 !docker-compose.yml
 !clone-repos.sh
 !pull-windows.ps1
+!pull-linux.sh
