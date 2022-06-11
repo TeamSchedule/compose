@@ -127,11 +127,21 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - POSTGRES_HOSTS=postgres:5432
+      - POSTGRES_HOSTS=schedule-postgres:5533
       - POSTGRES_DB=schedule
       - POSTGRES_USER=postgres
       - POSTGRES_PWD=qwerty
       - SERVER_PORT=8083
+  schedule-postgres:
+    image: postgres:14.2-alpine
+    container_name: "schedule-postgres"
+    environment:
+      - POSTGRES_DB=schedule
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+      - PGPORT=5533
+    ports:
+      - "5533:5533"
 
   jwt-filter:
     container_name: "jwt-filter"
